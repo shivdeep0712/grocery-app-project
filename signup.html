@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<!-- Created By shivdeep -->
+<html lang="en" dir="ltr">
+   <head>
+      <meta charset="utf-8">
+      <title>Login and Registration Form in HTML | shivdeep</title>
+      <link rel="stylesheet" href="/css/signup.css">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   </head>
+   <body>
+    <script type="module" defer>
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-analytics.js";
+        // import { getAuth } from 'https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js';
+        import { getAuth, signInWithEmailAndPassword,  createUserWithEmailAndPassword, sendPasswordResetEmail} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+
+        
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      const firebaseConfig = {
+         apiKey: "AIzaSyAmY-2IxyUHv2N1R0e9Lp0o_K8juuEGB_w",
+         authDomain: "grocery-website-599cf.firebaseapp.com",
+         projectId: "grocery-website-599cf",
+         storageBucket: "grocery-website-599cf.appspot.com",
+         messagingSenderId: "700401114651",
+         appId: "1:700401114651:web:e5fccda2b1531b228a62be",
+         measurementId: "G-5FZWCXW74Y"
+      };
+
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+
+        // authetication
+        getAuth().onAuthStateChanged( (user)=>{
+            if(user){
+                location.replace("index.html");
+            }
+        })
+
+        function login(){
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const auth = getAuth();
+            signInWithEmailAndPassword(auth,email,password)
+            .catch((error)=>{
+                document.getElementById("login-error").innerHTML = error.message;
+            });
+        }
+
+        function signUp(){
+            const email = document.getElementById("signupemail").value;
+            const password = document.getElementById("signuppassword").value;
+            const auth = getAuth();
+            createUserWithEmailAndPassword(auth, email, password)
+            .catch((error)=>{
+                document.getElementById("signup-error").innerHTML = error.message;
+            });
+        }
+
+        function forgetPassword(){
+            const email = document.getElementById("email").value;
+            const auth = getAuth();
+            sendPasswordResetEmail(auth,email)
+            .then(()=>{
+                alert("Reset link sent to your email id");
+            })
+            .catch((error)=>{
+                document.getElementById("login-error").innerHTML = error.message;
+            });
+        }
+
+        window.login = login;
+        window.signUp= signUp;
+        window.forgetPassword = forgetPassword;
+
+    </script>
+
+
+      <div class="wrapper">
+         <div class="title-text">
+            <div class="title login">
+               Login Form
+            </div>
+            <div class="title signup">
+               Signup Form
+            </div>
+         </div>
+         <div class="form-container">
+            <div class="slide-controls">
+               <input type="radio" name="slide" id="login" checked>
+               <input type="radio" name="slide" id="signup">
+               <label for="login" class="slide login">Login</label>
+               <label for="signup" class="slide signup">Signup</label>
+               <div class="slider-tab"></div>
+            </div>
+            <div class="form-inner">
+               <form action="#" class="login" >
+                  <div class="field">
+                     <input type="text" placeholder="Email Address" id = "email" required>
+                  </div>
+                  <div class="field">
+                     <input type="password" placeholder="Password" id = "password" required>
+                  </div>
+                  <div class="pass-link">
+                     <a href="#" onclick="forgetPassword()">Forgot password?</a>
+                  </div>
+                  <div class="field btn">
+                     <div class="btn-layer"></div>
+                     <input type="submit" value="Login" onclick="login()">
+                  </div>
+                  <div class="signup-link">
+                     Not a member? <a href="">Signup now</a>
+                     <small><span id="login-error" style="color: red;"></span></small>
+                  </div>
+               </form>
+               <form action="#" class="signup">
+                  <div class="field">
+                     <input type="text" placeholder="Email Address" id = "signupemail" required>
+                  </div>
+                  <div class="field">
+                     <input type="password" placeholder="Password" id = "signuppassword" required>
+                  </div>
+                  <div class="field btn">
+                     <div class="btn-layer"></div>
+                     <input type="submit" value="Signup" onclick="signUp()">
+                     <small><span id="signup-error" style="color: red;"></span></small>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+
+
+      <script>
+         const loginText = document.querySelector(".title-text .login");
+         const loginForm = document.querySelector("form.login");
+         const loginBtn = document.querySelector("label.login");
+         const signupBtn = document.querySelector("label.signup");
+         const signupLink = document.querySelector("form .signup-link a");
+         signupBtn.onclick = (()=>{
+           loginForm.style.marginLeft = "-50%";
+           loginText.style.marginLeft = "-50%";
+         });
+         loginBtn.onclick = (()=>{
+           loginForm.style.marginLeft = "0%";
+           loginText.style.marginLeft = "0%";
+         });
+         signupLink.onclick = (()=>{
+           signupBtn.click();
+           return false;
+         });
+
+        document.getElementsByClassName("login")[0].addEventListener("submit",(event)=>{
+            event.preventDefault();
+        })
+
+
+        document.getElementsByClassName("signup")[0].addEventListener("submit",(event)=>{
+            event.preventDefault();
+        })
+
+
+      </script>
+   </body>
+</html>
